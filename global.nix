@@ -13,6 +13,9 @@
   environment.systemPackages = with pkgs; [
     # Editors
     vimNox nano
+
+    # Always useful
+    git
   ];
 
   networking.firewall.rejectPackets = true;
