@@ -12,7 +12,7 @@
 
   environment.systemPackages = with pkgs; [
     # Editors
-    vimNox nano
+    vim nano
 
     # Always useful
     git
