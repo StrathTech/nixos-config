@@ -5,6 +5,7 @@
     [
       ../server.nix
       ../ldap.nix
+      ../homedirs.nix
     ];
 
   boot.loader.grub.enable = true;
