@@ -18,7 +18,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "yes";
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.09";
