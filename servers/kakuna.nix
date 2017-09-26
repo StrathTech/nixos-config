@@ -12,7 +12,7 @@
   boot.loader.grub.device = "/dev/sda";
 
   networking = {
-    hostName = "kakuna";
+    hostName = "kakuna.strathtech.co.uk";
     interfaces.enp4s0.ip4 = [ { address = "130.159.141.112"; prefixLength = 26;} ];
   };
 

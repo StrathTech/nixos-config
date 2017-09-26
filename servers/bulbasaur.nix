@@ -12,7 +12,7 @@
   boot.loader.grub.device = "/dev/sda";
 
   networking = {
-    hostName = "bulbasaur";
+    hostName = "bulbasaur.strathtech.co.uk";
     interfaces.enp4s0.ip4 = [ { address = "130.159.141.71"; prefixLength = 26;} ];
   };
 
