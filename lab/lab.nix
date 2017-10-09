@@ -42,4 +42,7 @@
     password = "password1";
   };
   security.sudo.enable = true;
+
+  nix.binaryCaches = [ "http://kakuna.strathtech.co.uk:5000/" "https://cache.nixos.org" ];
+  nix.trustedBinaryCaches = [ "http://kakuna.strathtech.co.uk:5000/" ];
 }
