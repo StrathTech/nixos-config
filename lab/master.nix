@@ -27,8 +27,8 @@ let
           echo "Booting..."
         }
         EOF
-        # cp target.kernel $out
-        # cp target.initrd $out
+        cp ${target.config.system.build.kernel}/bzImage $out
+        cp ${target.config.system.build.initialRamdisk}/initrd $out
         grub-mkimage --format=i386-pc-pxe -o $out/grub.pxe --prefix="(pxe)/" pxe net tftp normal linux
         ln -s ${pkgs.grub2}/lib/grub/i386-pc $out/
       '';
