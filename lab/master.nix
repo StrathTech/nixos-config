@@ -34,7 +34,6 @@ let
       '';
 
 in {
-  inherit hosts;
   services.dnsmasq.enable = true;
   services.dnsmasq.extraConfig = ''
     interface=enp5s0
