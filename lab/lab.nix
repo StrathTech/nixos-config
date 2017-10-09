@@ -2,32 +2,39 @@
 
 {
   imports = [
-    ./global.nix
+    ../global.nix
+    ../ldap.nix
+    ../homedirs.nix
   ];
 
+  /*
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
   };
+  */
 
   environment.systemPackages = with pkgs; [
-    neovim
-    xonotic
+    #neovim
+    #xonotic
   ];
 
   services.xserver = {
-    enable = true;
+    #enable = true;
     layout = "gb";
     xkbOptions = "eurosign:e";
-    desktopManager.plasma5.enable = true;
-  }
+    #desktopManager.plasma5.enable = true;
+  };
+
+  # Get hostname via DHCP
+  networking.hostName = "";
 
   # Fancy shells
   programs.zsh.enable = true;
   programs.fish.enable = true;
 
-  # disable remote login because mrpoo's login details are public
-  services.openssh.enable = false;
+  # disable password-authenticated remote login because ketchum's login details are public
+  services.openssh.passwordAuthentication = false;
 
   users.extraUsers.ketchum = {
     isNormalUser = true;
@@ -35,7 +42,4 @@
     password = "password1";
   };
   security.sudo.enable = true;
-
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "17.09";
 }

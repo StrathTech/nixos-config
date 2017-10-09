@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
-  imports = [ /etc/nixos/hardware-configuration.nix ];
+  imports = lib.optional (builtins.pathExists /etc/nixos/hardware-configuration.nix) /etc/nixos/hardware-configuration.nix;
 
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -24,4 +24,6 @@
   services.smartd.enable = true;
 
   # enable sudo?
+
+  system.stateVersion = "17.09";
 }

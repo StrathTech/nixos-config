@@ -6,6 +6,8 @@
       ../server.nix
       ../ldap.nix
       ../homedirs.nix
+      ../binary-cache.nix
+      ../lab/master.nix
     ];
 
   boot.loader.grub.enable = true;
