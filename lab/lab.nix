@@ -3,8 +3,6 @@
 {
   imports = [
     ../global.nix
-    ../ldap.nix
-    ../homedirs.nix
     <nixpkgs/nixos/modules/installer/netboot/netboot.nix>
   ];
 
