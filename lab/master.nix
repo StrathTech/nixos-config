@@ -19,7 +19,7 @@ let
       ''
         mkdir $out
         cat > $out/grub.cfg <<EOF
-        set timeout=1
+        set timeout=5
         menuentry "NixOS 32-bit" {
           echo "Loading kernel..."
           linux (pxe)/bzImage-i686 ${toString target-i686.config.boot.kernelParams}
