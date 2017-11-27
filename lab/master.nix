@@ -2,7 +2,8 @@
 let
   lab-machines = import ./machine-info.nix;
 
-  target = import <nixpkgs/nixos> { configuration = ./lab.nix; };
+  target-i686 = import <nixpkgs/nixos> { system = "i686-linux"; configuration = ./lab.nix; };
+  target-x86_64 = import <nixpkgs/nixos> { system = "x86_64-linux"; configuration = ./lab.nix; };
 
   hosts = pkgs.writeText "hosts"
     (lib.foldl' ( {ip, text}: {name, mac, ...}: {
@@ -19,16 +20,25 @@ let
         mkdir $out
         cat > $out/grub.cfg <<EOF
         set timeout=1
-        menuentry "NixOS" {
+        menuentry "NixOS 32-bit" {
           echo "Loading kernel..."
-          linux (pxe)/bzImage ${toString target.config.boot.kernelParams}
+          linux (pxe)/bzImage-i686 ${toString target-i686.config.boot.kernelParams}
           echo "Loading initramfs..."
-          initrd (pxe)/initrd
+          initrd (pxe)/initrd-i686
+          echo "Booting..."
+        }
+        menuentry "NixOS 64-bit" {
+          echo "Loading kernel..."
+          linux (pxe)/bzImage-x86_64 ${toString target-x86_64.config.boot.kernelParams}
+          echo "Loading initramfs..."
+          initrd (pxe)/initrd-x86_64
           echo "Booting..."
         }
         EOF
-        cp ${target.config.system.build.kernel}/bzImage $out
-        cp ${target.config.system.build.netbootRamdisk}/initrd $out
+        ln -s ${target-i686.config.system.build.kernel}/bzImage $out/bzImage-i686
+        ln -s ${target-i686.config.system.build.netbootRamdisk}/initrd $out/initrd-i686
+        ln -s ${target-x86_64.config.system.build.kernel}/bzImage $out/bzImage-x86_64
+        ln -s ${target-x86_64.config.system.build.netbootRamdisk}/initrd $out/initrd-x86_64
         grub-mkimage --format=i386-pc-pxe -o $out/grub.pxe --prefix="(pxe)/" pxe net tftp normal linux
         ln -s ${pkgs.grub2}/lib/grub/i386-pc $out/
       '';
