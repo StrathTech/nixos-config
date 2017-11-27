@@ -41,6 +41,7 @@
     isNormalUser = true;
     uid = 1000;
     password = "password1";
+    extraGroups = [ "sudo" ];
   };
   security.sudo.enable = true;
 
