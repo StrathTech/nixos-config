@@ -32,6 +32,7 @@
   programs.zsh.enable = true;
   programs.fish.enable = true;
 
+  services.openssh.enable = true;
   # disable password-authenticated remote login because ketchum's login details are public
   services.openssh.passwordAuthentication = false;
 
