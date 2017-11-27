@@ -9,6 +9,9 @@ let
     { mac = "00:23:24:07:a3:14"; name = "flareon"; disk-ok = true; }
     { mac = "00:23:24:01:a3:5c"; name = "glaceon"; disk-ok = true; }
     # eevee is broken, espeon seems to be missing. Investigate.
+
+    # Temporarily netbooting as lab machine
+    { mac = "00:30:48:72:4b:c4"; name = "alakazam"; disk-ok = true; }
   ];
   by-field = field: list: listToAttrs (map (x: {name = x.${field}; value = x;}) list);
 in {
