@@ -22,14 +22,14 @@ let
         set timeout=5
         menuentry "NixOS 32-bit" {
           echo "Loading kernel..."
-          linux (pxe)/bzImage-i686 ${toString target-i686.config.boot.kernelParams}
+          linux (pxe)/bzImage-i686 ${toString target-i686.config.boot.kernelParams} init=${target-i686.config.system.build.toplevel}/init
           echo "Loading initramfs..."
           initrd (pxe)/initrd-i686
           echo "Booting..."
         }
         menuentry "NixOS 64-bit" {
           echo "Loading kernel..."
-          linux (pxe)/bzImage-x86_64 ${toString target-x86_64.config.boot.kernelParams}
+          linux (pxe)/bzImage-x86_64 ${toString target-x86_64.config.boot.kernelParams} init=${target-x86_64.config.system.build.toplevel}/init
           echo "Loading initramfs..."
           initrd (pxe)/initrd-x86_64
           echo "Booting..."
