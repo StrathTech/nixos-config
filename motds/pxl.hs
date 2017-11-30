@@ -44,13 +44,21 @@ approximate :: PixelRGBA8 -> Word8
 approximate (PixelRGBA8 r g b a) = ((small r) * 36 + (small g) * 6 + small b) + 16 where
     small x = floor $ fromIntegral ((fromIntegral x * 5)) / fromIntegral 255
 
+setbg     (PixelRGBA8 _ _ _ 0) = "\ESC[m" -- Rudimentary transparency support
+setbg pix@(PixelRGBA8 _ _ _ a) = "\ESC[48;5;" ++ (show $ approximate pix) ++ "m"
+
+setfg     (PixelRGBA8 _ _ _ 0) = "\ESC[30m" -- Assume transparent == black
+setfg pix@(PixelRGBA8 _ _ _ a) = "\ESC[38;5;" ++ (show $ approximate pix) ++ "m"
+
 convert :: Image PixelRGBA8 -> String
 convert im =
-    concatMap row [y | y <- [0..imageHeight im - 1]]
-    where
-        row y = concatMap (\pix -> setbg pix ++ "  ") [pixelAt im x y | x <- [0..imageWidth im - 1]] ++ "\ESC[m\n"
-        setbg     (PixelRGBA8 _ _ _ 0) = "\ESC[m" -- Rudimentary transparency support
-        setbg pix@(PixelRGBA8 _ _ _ a) = "\ESC[48;5;" ++ (show $ approximate pix) ++ "m"
+    concatMap row [y | y <- [0,2..imageHeight im - 1]]
+        where
+            row y = (concatMap (\(top, bot) -> setbg top ++ setfg bot ++ "▄") $ pixelRows y) ++ "\ESC[m\n"
+            pixelRows y = [(at x y, at x (y+1)) | x <- [0..imageWidth im - 1]]
+            at x y | y == imageHeight im = PixelRGBA8 0 0 0 0
+                   | otherwise           = pixelAt im x y
+
 
 main :: IO ()
 main = do
