@@ -14,7 +14,7 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  environment.motd = lib.mkBefore (builtins.readFile ../motds/kakuna.ansi);
+  users.motd = lib.mkBefore (builtins.readFile ../motds/kakuna.ansi);
 
   networking = {
     hostName = "kakuna.strathtech.co.uk";
