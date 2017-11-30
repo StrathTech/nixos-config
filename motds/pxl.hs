@@ -66,4 +66,4 @@ main = do
     image_ <- readImage im
     case image_ of
       Left err -> putStrLn err
-      Right image -> putStrLn $ convert $ convertRGBA8 image
+      Right image -> putStr $ convert $ convertRGBA8 image
