@@ -35,8 +35,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -}
 import System.Environment
-import Text.Printf
+import Data.Char
 import Data.List
+import Data.Maybe
 import Data.Word
 import Codec.Picture (readImage, Image, PixelRGBA8 (..), pixelAt, imageWidth, imageHeight, convertRGBA8)
 
@@ -44,23 +45,44 @@ approximate :: PixelRGBA8 -> Word8
 approximate (PixelRGBA8 r g b a) = ((small r) * 36 + (small g) * 6 + small b) + 16 where
     small x = floor $ fromIntegral ((fromIntegral x * 5)) / fromIntegral 255
 
-setbg pix = "\ESC[48;5;" ++ (show $ approximate pix) ++ "m"
-setfg pix = "\ESC[38;5;" ++ (show $ approximate pix) ++ "m"
-
 isTransparent (PixelRGBA8 _ _ _ 0) = True
 isTransparent _ = False
+
+data BG = Transparent | BG Word8 deriving Eq
+data FG = FG Word8 deriving Eq
+
+class Settable t where
+    set :: t -> String
+
+instance Settable BG where
+    set Transparent = "\ESC[49m"
+    set (BG n) = "\ESC[48;5;" ++ show n ++ "m"
+
+instance Settable FG where
+    set (FG n) = "\ESC[38;5;" ++ show n ++ "m"
+
+doPixel :: PixelRGBA8 -> PixelRGBA8 -> (Maybe BG, Maybe FG, Char)
+doPixel top bot
+    | isTransparent top && isTransparent bot = (Just Transparent, Nothing, ' ')
+    | isTransparent bot                      = (Just Transparent, Just (FG (approximate top)), '▀')
+    | isTransparent top                      = (Just Transparent, Just (FG (approximate bot)), '▄')
+    | otherwise                              = (Just (BG (approximate top)), Just (FG (approximate bot)), '▄')
+
+setFrom :: (Settable t, Eq t) => t -> Maybe t -> String
+setFrom old = maybe "" (\new -> if new == old then "" else set new)
+
+nextPixel :: ((BG, FG), String) -> (PixelRGBA8, PixelRGBA8) -> ((BG, FG), String)
+nextPixel ((oldb, oldf), soFar) (top, bot) = ((fromMaybe oldb newb, fromMaybe oldf newf), soFar ++ setFrom oldb newb ++ setFrom oldf newf ++ [char])
+    where (newb, newf, char) = doPixel top bot
 
 convert :: Image PixelRGBA8 -> String
 convert im =
     concatMap row [y | y <- [0,2..imageHeight im - 1]]
         where
-            row y = (concatMap (uncurry doPixel) $ pixelRows y) ++ "\ESC[m\n"
-            doPixel top bot
-                | isTransparent bot && isTransparent top = "\ESC[m "
-                | isTransparent bot = "\ESC[m" ++ setfg top ++ "▀"
-                | isTransparent top = "\ESC[m" ++ setfg bot ++ "▄"
-                | otherwise         = setbg top ++ setfg bot ++ "▄"
+            row y = (snd (foldl nextPixel ((Transparent, FG 7), "") $ pixelRows y)) ++ "\ESC[m\n"
+
             pixelRows y = [(at x y, at x (y+1)) | x <- [0..imageWidth im - 1]]
+
             at x y | y == imageHeight im = PixelRGBA8 0 0 0 0
                    | otherwise           = pixelAt im x y
 
