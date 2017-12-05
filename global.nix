@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }:
 {
+  imports = [ ./motd.nix ];
   i18n = {
     consoleFont = "Lat2-Terminus16";
     consoleKeyMap = "uk";
