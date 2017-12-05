@@ -12,7 +12,7 @@
   boot.loader.grub.device = "/dev/sda";
 
   networking = {
-    hostName = "loudred.strathtech.co.uk";
+    hostName = "loudred";
     interfaces.enp2s0f0.ip4 = [ { address = "130.159.141.76"; prefixLength = 26;} ];
   };
 

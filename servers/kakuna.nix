@@ -17,7 +17,7 @@
   users.motd = lib.mkBefore (builtins.readFile ../motds/kakuna.ansi);
 
   networking = {
-    hostName = "kakuna.strathtech.co.uk";
+    hostName = "kakuna";
     interfaces.enp4s0.ip4 = [ { address = "130.159.141.112"; prefixLength = 26;} ];
   };
 

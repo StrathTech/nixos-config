@@ -14,7 +14,7 @@
   boot.loader.grub.device = "/dev/sda";
 
   networking = {
-    hostName = "rattata.strathtech.co.uk";
+    hostName = "rattata";
     interfaces.enp4s0.ip4 = [ { address = "130.159.141.75"; prefixLength = 26;} ];
   };
 
