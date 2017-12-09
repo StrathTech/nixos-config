@@ -56,7 +56,7 @@ in {
     dhcp-hostsfile=${hosts}
 
     dhcp-authoritative
-    dhcp-range=10.123.0.10,10.123.0.200,6h
+    dhcp-range=10.123.0.10,10.123.0.200,24h
 
     dhcp-boot=grub.pxe
     enable-tftp
