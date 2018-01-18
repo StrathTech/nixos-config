@@ -22,6 +22,10 @@
   ];
 
   networking.firewall.rejectPackets = true;
+  networking.timeServers = [
+    "ntp0.net.strath.ac.uk"
+    "ntp1.net.strath.ac.uk"
+  ];
 
   # We have unreliable hard disks everywhere!
   services.smartd.enable = true;
