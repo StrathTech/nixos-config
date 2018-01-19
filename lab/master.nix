@@ -62,7 +62,9 @@ in {
     enable-tftp
     tftp-root=${tftp-root}
 
-    dhcp-option=42,ntp0.net.strath.ac.uk,ntp1.net.strath.ac.uk
+    # ntp[10].net.strath.ac.uk
+    dhcp-option=42,130.159.228.123,130.159.248.123
+
     # If we're not a router, send these.
     #dhcp-option=3
     #dhcp-option=6
