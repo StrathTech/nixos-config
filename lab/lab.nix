@@ -36,6 +36,9 @@
   # disable password-authenticated remote login because ketchum's login details are public
   services.openssh.passwordAuthentication = false;
 
+  # For badblocks testing project
+  users.users.root.openssh.authorizedKeys.keys = ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8ze/k7b5MHnWCpmsbJZosSWBHnRJfTkUNlUzvoyP76ANC6oFNdYiUUlDzmECqAjBZm1nYJygAlroYfnZuCP16JgiRBfuiQwv8Mp0aRmDjXgrbD7/pfreofd+rlu5HIe6edsYW2KSfVh9AAqUBibCCtsX0sb1SNzMDLNVlKogtmgEMhcm5uwGPtaiohFHEC51HRxT5HGLwEWvhDs6eTl9R5n/Ougb30rB3wzLmDaJZDJ/4PYEIHoLZhcWCMKiYzSbCxzxeHaPhP1LdaB1Q5uQYQC92ZiHxxKfO3LZnNC3U6qH7GxBJinnfkA2T69PRL6eeTLZZyDnI/0pwPUc4HfpP lheckemann@squirtle"];
+
   users.extraUsers.ketchum = {
     isNormalUser = true;
     uid = 1000;
