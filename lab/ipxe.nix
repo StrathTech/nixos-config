@@ -1,8 +1,8 @@
 { ipxe, writeText
 , ipxeScript ? writeText "boot.ipxe" ''
   #!ipxe
-  dhcp
-  chain http://netboot.strathtech.co.uk/boot.ipxe
+  dhcp || dhcp || dhcp || dhcp || dhcp || shell
+  chain http://netboot.strathtech.co.uk/boot.ipxe || shell
 ''
 }:
 ipxe.overrideAttrs (o: {
