@@ -4,5 +4,7 @@ let pkgs = import <nixpkgs> {};
 in {
   system-i686 = target-i686.config.system.build.toplevel;
   system-x86_64 = target-x86_64.config.system.build.toplevel;
+  initrd-i686 = target-i686.config.system.build.netbootRamdisk;
+  initrd-x86_64 = target-x86_64.config.system.build.netbootRamdisk;
   ipxe = pkgs.callPackage ./ipxe.nix {};
 }
