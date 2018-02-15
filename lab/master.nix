@@ -41,14 +41,37 @@ let
         ln -s ${target-i686.config.system.build.netbootRamdisk}/initrd $out/initrd-i686
         ln -s ${target-x86_64.config.system.build.kernel}/bzImage $out/bzImage-x86_64
         ln -s ${target-x86_64.config.system.build.netbootRamdisk}/initrd $out/initrd-x86_64
+        cat >> $out/boot-i686.ipxe <<EOF
+        #!ipxe
+        kernel http://netboot.strathtech.co.uk/bzImage-i686 ${toString target-i686.config.boot.kernelParams} init=${target-i686.config.system.build.toplevel}/init
+        initrd http://netboot.strathtech.co.uk/initrd-i686
+        EOF
+        cat >> $out/boot-x86_64.ipxe <<EOF
+        #!ipxe
+        kernel http://netboot.strathtech.co.uk/bzImage-x86_64 ${toString target-x86_64.config.boot.kernelParams} init=${target-x86_64.config.system.build.toplevel}/init
+        initrd http://netboot.strathtech.co.uk/initrd-x86_64
+        EOF
         grub-mkimage --format=i386-pc-pxe -o $out/grub.pxe --prefix="(pxe)/" pxe net tftp normal linux
         ln -s ${pkgs.grub2}/lib/grub/i386-pc $out/
+        ln -s ${pkgs.callPackage ./ipxe.nix {}}/* $out/
       '';
 
 in {
+  system.extraSystemBuilderCmds = ''
+    ln -s ${tftp-root} $out/netboot
+  '';
+  services.nginx.enable = true;
+  services.nginx.virtualHosts."netboot.strathtech.co.uk" = {
+    #enableACME = true;
+    #addSSL = true;
+    root = "/var/lib/tftp";
+  };
   services.dnsmasq.enable = true;
   networking.firewall.allowedUDPPorts = [ 53 67 69 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
   networking.interfaces.enp5s0.ip4 = [ { address = "10.123.0.1"; prefixLength = 24; } ];
+
+  # https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml is useful
   services.dnsmasq.extraConfig = ''
     interface=enp5s0
     keep-in-foreground
@@ -58,9 +81,10 @@ in {
     dhcp-authoritative
     dhcp-range=10.123.0.100,10.123.0.200,24h
 
-    dhcp-boot=grub.pxe
+    dhcp-boot=undionly.kpxe
     enable-tftp
-    tftp-root=${tftp-root}
+    #tftp-root=${tftp-root}
+    tftp-root=/var/lib/tftp
 
     # ntp[10].net.strath.ac.uk
     dhcp-option=42,130.159.228.123,130.159.248.123
