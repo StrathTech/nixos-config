@@ -6,6 +6,12 @@
     <nixpkgs/nixos/modules/installer/netboot/netboot.nix>
   ];
 
+  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux.override {
+    extraConfig = ''
+      E1000E y
+    '';
+  });
+
   /*
   boot.loader.grub = {
     enable = true;
