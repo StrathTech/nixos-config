@@ -14,7 +14,7 @@
   networking = {
     hostId = "6d657774";
     hostName = "mewtwo";
-    interfaces.ext.ip4 = [ { address = "130.159.141.100"; prefixLength = 26;} ];
+    interfaces.ext.ipv4.addresses = [ { address = "130.159.141.100"; prefixLength = 26;} ];
   };
 
   # Enable the OpenSSH daemon.
