@@ -9,7 +9,7 @@
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
-  boot.supportedFileSystems = [ "zfs" ];
+  boot.supportedFilesystems = [ "zfs" ];
 
   networking = {
     hostId = "6d657774";
