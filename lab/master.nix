@@ -67,9 +67,14 @@ in {
     root = "/var/lib/tftp";
   };
   services.dnsmasq.enable = true;
-  networking.firewall.allowedUDPPorts = [ 53 67 69 ];
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-  networking.interfaces.enp5s0.ip4 = [ { address = "10.123.0.1"; prefixLength = 24; } ];
+  networking = {
+    firewall.allowedUDPPorts = [ 53 67 69 ];
+    firewall.allowedTCPPorts = [ 80 443 ];
+    interfaces.enp5s0.ip4 = [ { address = "10.123.0.1"; prefixLength = 24; } ];
+    nat.enable = true;
+    nat.externalInterface = "enp4s0";
+    nat.internalInterfaces = [ "enp5s0" ];
+  };
 
   # https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml is useful
   services.dnsmasq.extraConfig = ''
