@@ -6,18 +6,26 @@
     <nixpkgs/nixos/modules/installer/netboot/netboot.nix>
   ];
 
-  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux.override {
-    extraConfig = ''
-      E1000E y
-    '';
-  });
-
   /*
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
   };
   */
+  boot = {
+    /*
+    kernelPackages = pkgs.linuxPackagesFor (pkgs.linux.override {
+      extraConfig = ''
+        E1000E y
+      '';
+    });
+    */
+
+    supportedFilesystems = [ "zfs" ];
+    initrd.preDeviceCommands = "head -c 4 /dev/urandom > /etc/hostid";
+    initrd.postMountCommands = "cp /etc/hostid /mnt-root/etc/hostid";
+  };
+  networking.hostId = "deadbeef"; # dummy
 
   environment.systemPackages = with pkgs; [
     #neovim
