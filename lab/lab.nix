@@ -4,6 +4,7 @@
   imports = [
     ../global.nix
     <nixpkgs/nixos/modules/installer/netboot/netboot.nix>
+    ../wakeonlan.nix
   ];
 
   /*
