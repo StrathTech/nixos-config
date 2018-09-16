@@ -45,11 +45,13 @@ let
         #!ipxe
         kernel http://netboot.strathtech.co.uk/bzImage-i686 ${toString target-i686.config.boot.kernelParams} init=${target-i686.config.system.build.toplevel}/init
         initrd http://netboot.strathtech.co.uk/initrd-i686
+        boot
         EOF
         cat >> $out/boot-x86_64.ipxe <<EOF
         #!ipxe
         kernel http://netboot.strathtech.co.uk/bzImage-x86_64 ${toString target-x86_64.config.boot.kernelParams} init=${target-x86_64.config.system.build.toplevel}/init
         initrd http://netboot.strathtech.co.uk/initrd-x86_64
+        boot
         EOF
         grub-mkimage --format=i386-pc-pxe -o $out/grub.pxe --prefix="(pxe)/" pxe net tftp normal linux
         ln -s ${pkgs.grub2}/lib/grub/i386-pc $out/
