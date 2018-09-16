@@ -23,7 +23,7 @@
 
     supportedFilesystems = [ "zfs" ];
     initrd.preDeviceCommands = "head -c 4 /dev/urandom > /etc/hostid";
-    initrd.postMountCommands = "cp /etc/hostid /mnt-root/etc/hostid";
+    initrd.postMountCommands = "mkdir -p /mnt-root/etc && cp /etc/hostid /mnt-root/etc/hostid";
   };
   networking.hostId = "deadbeef"; # dummy
 
